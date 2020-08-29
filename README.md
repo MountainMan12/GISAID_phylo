@@ -23,12 +23,12 @@ Data_filt.py : The python script performs the data cleaning and writes the clean
 
 ### PHYLOGENETIC ANALYSIS
 
-The phylogenetic analysis was performed on the https://usegalaxy.org/ server using the filtered genomic datasets for 3620 genomes,
+The phylogenetic analysis was performed on the https://usegalaxy.org/ server using the filtered genomic datasets for 3620 genomes. <br/>
 MAFFT was used for multiple sequence alignment with default paramteres, and FASTTREE was used for the phylogenetic tree reconstruction.
 
 ### OR CALCULATION
 
-To generate the annotations for the tree ORCaD app was used, along with OR calculations
+To generate the annotations for the tree ORCaD app was used, along with OR calculations <br/>
 For OR calculations see [ORCaD](https://github.com/MountainMan12/GISAID_phylo/tree/master/ORCaD)
 
 
