@@ -1,6 +1,8 @@
 # Phylogenomic analysis of all available COVID-19 genomes and its influence on mortality
 
-![Tree Image](/Images/Tree.png)
+<div align='center'>
+  <img src='https://github.com/MountainMan12/GISAID_phylo/blob/master/Images/Tree.png'>
+</div>
 
 ## Package information
 ### Python 3.7.4
