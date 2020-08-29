@@ -1,0 +1,102 @@
+Deceased,High risk,1
+Released,Low risk,3
+unknown,-,1
+-,-,213
+Alive,-,123
+Asymptomatic,Low risk,92
+"Asymptomatic, identified as positive during preoperation investigation",Low risk,1
+Asymptomatic/Released,Low risk,1
+Bronchitis,High risk,1
+Cured,Low risk,45
+DAMA,-,2
+Death,High risk,2
+Deceased,High risk,296
+Discharged,High risk,10
+Discharged after recovery,High risk,3
+EHPAD,-,16
+EHPAD_IRA,High risk,2
+Epidemiology Study,-,1
+Home,Low risk,47
+Hopsitalized,Low risk,9
+Hospitaized,Low risk,1
+Hospitalised,Low risk,2
+Hospitalized,Low risk,1193
+Hospitalized,Low risk,1
+Hospitalized (Intensive care unit),High risk,1
+Hospitalized in ICU,High risk,1
+Hospitalized or to be hospitalized,Low risk,1
+"Hospitalized, deceased",High risk,3
+"Hospitalized, oxygenotherapy, diarrhea",Low risk,1
+"Hospitalized, released",Low risk,2
+Hospitalized/Deceased,High risk,1
+Hospitalized/Released,Low risk,3
+Hospitalized; Stable,Low risk,25
+"Hospsitalized, ICU, fully recovered",High risk,1
+"ICD-10 CODE: J20.9 – ACUTE BRONCHITIS, UNSPECIFIED",High risk,1
+"ICD-10 Disease: J06.9 Acute upper respiratory infection, unspecified",High risk,12
+ICD-10 Disease: Z03.8 Observation for other suspected diseases and conditions,Low risk,2
+ICD-10 Disease: Z20.8 Contact with and exposure to other communicable diseases,High risk,4
+"ICD-10 Disease:J18.9 Pneumonia, unspecified organism",High risk,1
+ICU,High risk,3
+ICU; Serious,High risk,1
+In-hospital,Low risk,14
+"Initially hospitalized, but now improved and discharged",Low risk,1
+Intensive Care Unit,High risk,5
+Isolation,Low risk,1
+Live,-,637
+Live,Low risk,1
+"Live, acute respiratory infection",High risk,1
+"Live, mild symptoms, at home",Low risk,1
+"Live, physical examination",Low risk,1
+Mild,Low risk,42
+Mild / Contact exposure / Asymptomatic,Low risk,2
+Mild case,Low risk,1
+Mild clinical signs without hospitalization,Low risk,19
+"Mild symptoms (fever, cardiovascular disorders)",Low risk,1
+Mild symptoms inpatient for observation,Low risk,1
+"Mild, at home.",Low risk,1
+Mild/Contact exposure/Asymptomatic,Low risk,2
+Moderate / Outpatient,Low risk,2
+Moderate/Outpatient,Low risk,3
+NA,-,19
+Naso-pharyngeal swab,-,17
+Not Hospitalized,Low risk,9
+Not hospitalized,Low risk,9
+Not known,-,30
+Oro-pharyngeal swab,-,1
+Outpatient,Low risk,40
+Patient status,-,1
+Physician,-,2
+Physician network,-,17
+Pneumonia (chest X-ray),High risk,3
+Quarantine,Low risk,13
+Quarantined,Low risk,3
+Recovered,Low risk,71
+Recovered and Released,Low risk,1
+Recovering,Low risk,10
+Released,Low risk,758
+Released,Low risk,1
+"Released, Live",Low risk,35
+Screening,-,1
+Severe / ICU,High risk,4
+Severe/ICU,High risk,3
+Stable in quarantine,Low risk,1
+Still hospitalized,Low risk,8
+Symptomatic,-,506
+Symptoms indicative of upper respiratory infection,High risk,1
+Unknow,-,1
+Unkown,-,1
+Z039,-,1
+asymptomatic,Low risk,1
+deceased,High risk,1
+hospitalized,Low risk,100
+hospitalized or to be hospitalized,Low risk,15
+inpatient,High risk,2
+live,Low risk,2
+n/a,-,8
+outpatient,Low risk,2
+symptomatic,-,3
+uncknown,-,1
+unknow,-,6
+unknown,-,2
+unkown,-,7
