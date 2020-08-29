@@ -1,11 +1,14 @@
 # ORCaD - **O**dds **R**atio **Ca**lculations for **G**isaid data
 ## Introduction
 This is small shine application for Odds Ration calculation for GISAID dataset. Made as a part of HackBio internship. 
+
 <div align='center'>
   <img src='https://github.com/pavlohrab/GISAID_phylo/blob/master/ORCaD/Images/intro.png'>
 </div>
+
 ## Dependencies 
-This application is ready to use. However if you want to run it locally (not on the (shinyapps)[https://biopavlohrab.shinyapps.io/ORCaG/] you need to manually install
+
+This application is ready to use. However if you want to run it locally (not on the [shinyapps](https://biopavlohrab.shinyapps.io/ORCaG/)) you need to manually install
 - R v 4.02
 - Rstudio v. 1.3.959
 - Bioconductor
@@ -49,7 +52,7 @@ BiocManager::install(c("ggtree", "optparse", "plotrix", "getopt", "readODS"))
 After all libraries are installed you are ready to go!
 
 ## Usage
-If you are starting app locally, you need to press run app button in the Rstudio (upper border of the script on the right). Or you can (use version)[https://biopavlohrab.shinyapps.io/ORCaG/] from shinyapps.io
+If you are starting app locally, you need to press run app button in the Rstudio (upper border of the script on the right). Or you can [use web version](https://biopavlohrab.shinyapps.io/ORCaG/) from shinyapps.io
 App main screen :
 <div align='center'>
   <img src='https://github.com/pavlohrab/GISAID_phylo/blob/master/ORCaD/Images/main_screen.png'>
