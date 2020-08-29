@@ -1,6 +1,6 @@
 # ORCaD - **O**dds **R**atio **Ca**lculations for **G**isaid data
 ## Introduction
-This is small shine application for Odds Ration calculation for GISAID dataset. Made as a part of HackBio internship. 
+This is small shiny application for Odds Ration calculation for GISAID dataset.
 
 <div align='center'>
   <img src='https://github.com/pavlohrab/GISAID_phylo/blob/master/ORCaD/Images/intro.png'>
