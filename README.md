@@ -12,11 +12,11 @@
 
 ### R
 <b>Package information</b>
--ggplot2
--hrbrthemes
--dplyr
--tidyr
--viridis
+- ggplot2
+- hrbrthemes
+- dplyr
+- tidyr
+- viridis
 
 
 ### DATASETS
