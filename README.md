@@ -1,4 +1,4 @@
-# Phylogenomic analysis of all available COVID-19 genomes and its influence on mortality
+# COVID-19 mortality risk assessment among various age groups using phylogenomic analysis
 
 <div align='center'>
   <img src='https://github.com/MountainMan12/GISAID_phylo/blob/master/Images/Tree.png'>
