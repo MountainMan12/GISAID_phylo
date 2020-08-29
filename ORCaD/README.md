@@ -58,7 +58,12 @@ Then the usage of the GUI is pretty the same. Inputs should be:
 <div align='center'>
   <img src='https://github.com/pavlohrab/GISAID_phylo/blob/master/ORCaD/Images/inputs.png'>
 </div>
-1.GISAID dataset is a must. We assume you are downloading 14-column dataset with ` \t ` as separator (tsv file). Names of the columns doesn't matter, but we are using the first one as Virus.name, second - as Accession.ID, and so on (```"Virus.name", "Accession.ID", "Collection.date" , "Location" , "Host", "Additional.location.information","Gender" , "Patient.age", "Patient.status","Passage", "Specimen","Additional.host.information","Lineage", "Clade"```). <br> If your dataset is different please note **App will use columns as declared. So if the Location column is empty you with not be able to get Country data, if Clade is empty - no Clade information, and so on..** . The only required columns for OR calculations are Patient.age and Patient.status - names doen't matter but they should be 8th and 9th column of a dataset. <br>
+1.GISAID dataset is a must. We assume you are downloading 14-column dataset with `\t` as separator (tsv file). Names of the columns doesn't matter, but we are using the first one as Virus.name, second - as Accession.ID, and so on. The example is below:
+<br>
+
+>"Virus.name, Accession.ID, Collection.date, Location, Host, Additional.location.information,Gender, Patient.age, Patient.status,Passage, Specimen, Additional.host.information, Lineage, Clade"
+ <br> 
+If your dataset is different please note **App will use columns as declared. So if the Location column is empty you with not be able to get Country data, if Clade is empty - no Clade information, and so on..** . The only required columns for OR calculations are Patient.age and Patient.status - names doen't matter but they should be 8th and 9th column of a dataset. <br>
 2. Status_assignment.csv file. This is comma-delimited file, where the first column is `Patient.status` categories from GISAID dataset, and the second - categories you want to rename into. If you want to delete category completely. leave cell in the second column blank , or type "-" (without ""). <br> The example of this file is in the folder. Note: **The app will use only the first two columns, and second column should have only two categories for OR calculations**  <br>
 3. Tree is a newick format. This input is optional, only required if you want to generate iTOL annotation files or map Patient.status categories to the nodes <br>
 
