@@ -29,12 +29,6 @@ Data_filt.py : The python script performs the data cleaning and writes the clean
   - Input: The script takes input the GISAID clinical data containing all samples, along with the complete GISAID genomic data for 4592 samples.
   - Output: Two files containing filtered samples.
   
-### IMMUNITY REACTION PLOT
-
-Data was filtered and classified into Best Reaction, Mild Reaction and Worst reaction. The age was made a numerical variable and then a plot was made against status.
-This was to see the immunity distribution across ages
-  
-
 ### PHYLOGENETIC ANALYSIS
 
 The phylogenetic analysis was performed on the https://usegalaxy.org/ server using the filtered genomic datasets for 3620 genomes. <br/>
