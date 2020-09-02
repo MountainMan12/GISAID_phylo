@@ -33,6 +33,8 @@ library(getopt) #Installed via Bioconductor
 library(optparse)
 library(plotrix)
 library(readODS) 
+library(plotly)
+library(epitools)
 #If there are import problems, feel free to install packages via install.packages() or via Bioconductor
 
 
@@ -60,8 +62,8 @@ ui <- fluidPage(
                         selected = 0),
             #Multiple select input for itol node coloring
             selectInput("itol_background", 
-                        "Choose iTOL column for clade coloring in iTOL:", list("Country"="Country", "Host"="Host", "Gender"="Gender", "Patient.status"="Patient.status", "Patient.age"="Patient.age" , "Specimen"="Specimen" ,"Lineage"="Lineage", "Clade"="Clade", "Age groups"="groups" ),
-                        selected = "Patient status"),
+                        "Choose iTOL column for clade coloring in iTOL:", list("Country"="Country", "Host"="Host", "Gender"="Gender", "Patient.status"="Patient.status", "Patient.age"="Patient.age" , "Specimen"="Specimen" ,"Lineage"="Lineage", "Clade"="Clade" ),
+                        selected = "Patient.status"),
             #Button click to generate iTOL files
             actionButton("itol","Generate iTOL file and annotations" ),
             #Button to download generated iTOL files
@@ -75,8 +77,10 @@ ui <- fluidPage(
                         "Hospitalized patient status:", list("Default"=0,"Low risk"=1,"High risk"=2, "Remove from data"=3),
                         selected = 0),
             #Check box input for what to do with alive/live/symptomatic patients
-            checkboxInput("more_data", 
-                          "Include alive/live/symptomatic patients in the analysis (Low risk)"),
+            selectInput("more_data", 
+                        "Include alive/live/symptomatic patients in the analysis:", list("Default"=0,"Include/Low risk"=1,
+                                                                                         "Remove from data"=2),
+                        selected = 0),
             #Button to download currently used dataset
             downloadButton("current_dataset","Download currently used dataset"),
             #Slider to choose age cutoff
@@ -89,7 +93,7 @@ ui <- fluidPage(
 
         # Show a plot of the generated distribution
         mainPanel(
-          plotOutput("oddsPlot"),
+          plotlyOutput("oddsPlot"),
           #Texts for OR for specific age cutoff view
           textOutput("age_cut"),
           textOutput("age_mes"),
@@ -99,6 +103,8 @@ ui <- fluidPage(
           plotOutput("tree"),
           plotOutput("ageDensity"),
           plotOutput("Countries"),
+          plotlyOutput("country_count"),
+          plotlyOutput("country_odds"),
           plotOutput("boxplot_age"),
           plotOutput("cladeAge"),
           #Interactive tree view with phylocabvas
@@ -109,6 +115,7 @@ ui <- fluidPage(
 
 #Server logic to draw texts and charts
 server <- function(input, output) {
+  options(warn = -1)
   #Main function to generate iTOL files. From https://github.com/mgoeker/table2itol 
     create_itol_files <- function(infiles, identifier = "ID", label = "Label",
                                 background = "", identifier2 = "", directory = ".", colour.file = "",
@@ -1256,7 +1263,9 @@ server <- function(input, output) {
   }
   
     #Define values that would be changed while app is working. Datasets are also stores as reactive values
-    values <- reactiveValues(test_data = NULL, primary_data=NULL, assignment_data=NULL, age_cuttoff = NULL, assignment_data_backup = NULL, age_min=NULL, age_max=NULL)
+    values <- reactiveValues(test_data = NULL, primary_data=NULL, assignment_data=NULL,
+                             age_cuttoff = NULL, assignment_data_backup = NULL, age_min=NULL, 
+                             age_max=NULL)
     
     #This observes event of gisaid dataset upload. If uploaded cleaned the age and stires as reactive value
     observeEvent(input$gisaid, {
@@ -1415,16 +1424,17 @@ server <- function(input, output) {
           values$assignment_data$V2 <- with(values$assignment_data, ifelse(V1=='hospitalized or to be hospitalized', '-', V2))
         }
         #Logic how to treat alive/live/symptomatic patients
-        if (input$more_data == TRUE) {
+        if (as.numeric(input$more_data) == 1) {
           values$assignment_data$V2 <- with(values$assignment_data, ifelse(V1=='Live', 'Low risk', V2))
           values$assignment_data$V2 <- with(values$assignment_data, ifelse(V1=='Alive', 'Low risk', V2))
           values$assignment_data$V2 <- with(values$assignment_data, ifelse(V1=='Symptomatic', 'Low risk', V2))
           
-        } else {
+        } 
+        if (as.numeric(input$more_data) == 2){
           values$assignment_data$V2 <- with(values$assignment_data, ifelse(V1=='Live', '-', V2))
           values$assignment_data$V2 <- with(values$assignment_data, ifelse(V1=='Alive', '-', V2))
           values$assignment_data$V2 <- with(values$assignment_data, ifelse(V1=='Symptomatic', '-', V2))
-        }
+        } 
         # Final values mapping and dataset cleaning
         values$primary_data$Patient.status <- as.character(values$primary_data$Patient.status)
         values$primary_data$Patient.status <- trimws(values$primary_data$Patient.status, which=c("both"))
@@ -1532,7 +1542,7 @@ server <- function(input, output) {
     
     
     #Output plots
-    output$oddsPlot <- renderPlot({
+    output$oddsPlot <- renderPlotly({
       #Do the staff only if gisaid dataset and status_assignment file are uploaded
         req(input$gisaid)
         req(input$status)
@@ -1540,8 +1550,11 @@ server <- function(input, output) {
         #OR calculations
         ages = 1
         odds_old <- c()
+        odds_min <- c()
+        odds_max <- c()
         #Loop to generate vector of odds ratio calculations of every
         # age theshold from 1 to max(Patient.age)-1
+        
         for (ages in seq(1:(max(values$test_data$Patient.age)-1))) {
           age <- values$test_data[,c(8,9)] %>%
             drop_na() %>%
@@ -1554,18 +1567,24 @@ server <- function(input, output) {
           age_new <- epi.2by2(t(as.matrix(age))[c(">cutoff", "<cutoff"),c("High risk","Low risk")])
           age_new <- as.data.frame(age_new$res$OR.strata.wald)
           odds_old <- c(odds_old, age_new$est)
+          odds_min <- c(odds_min,age_new$lower)
+          odds_max <- c(odds_max,age_new$upper)
           ages <- ages +1
         }
-        #Convert vector to dataframe
+        
         odds_old <- as.data.frame(odds_old) 
         odds_old["Age_threshold"] <- seq(1:(max(values$test_data$Patient.age)-1))
-        #Plot a scatterplot
-        odds_old %>%
-          ggplot(aes(x=Age_threshold, y=as.numeric(odds_old))) + 
+        odds_old["Min"] <- odds_min
+        odds_old["Max"] <- odds_max
+        odds_plot <- odds_old %>%
+          ggplot(aes(x=Age_threshold, y=as.numeric(odds_old),
+                     lower = Min, upper=Max)) + 
           geom_point(size = 3, alpha=.7, color="#69b3a2") +
           ggtitle("Odds ratio of being at high risk given the age threshold") +
-          ylab("Odds ratio") +
+          ylab("Odds ratio value") +
           xlab("Patient age threshold") 
+        
+        ggplotly(odds_plot)
         
     })
     #Print individual OR for given age cutoff
@@ -1633,6 +1652,8 @@ server <- function(input, output) {
         req(input$status)
         req(input$tree)
         
+        
+        
         #Read tree
         tree <- read.tree(inFile_tree$datapath)%>% as.phylo()
         #Write tree
@@ -1642,7 +1663,7 @@ server <- function(input, output) {
         #Tree calculations
         if (as.numeric(input$tree_labels) == 0) {
           tree_subset <- values$test_data %>%
-            select(Virus.name, Patient.status) %>%
+            select(Virus.name, Patient.status)%>%
             dplyr::rename(label=Virus.name)
         } 
         if (as.numeric(input$tree_labels) == 1){
@@ -1652,10 +1673,13 @@ server <- function(input, output) {
         }
         #remove spaces in manes from Patient.status
         tree_subset <- apply(tree_subset,2,function(x)gsub('\\s+', '_',x))
+        
+      
         #Join tree and Patient.status data
         tree <- treeio::full_join(tree, tree_subset, by="label")
-        #Plot
-        ggtree(tree, aes(color=Patient.status), layout = "circular") +theme(plot.margin = unit(c(-5,-4,-6,-7), "cm"))
+        
+          ggtree(tree, aes(color=Patient.status), layout = "circular") +theme(plot.margin = unit(c(-5,-4,-6,-7), "cm"))
+        
     })
     
     #Write currently used dataset to download hangler
@@ -1787,8 +1811,11 @@ server <- function(input, output) {
         ptlist <- list(o_ctr, y_ctr) 
         #Plot the plots one near another
         grid.arrange(grobs=ptlist,ncol=length(ptlist))
-      
+
     })
+    
+    
+    
     
     #Render boxplot chart for age
     output$boxplot_age <- renderPlot({
@@ -1876,8 +1903,88 @@ server <- function(input, output) {
       
     })
     
+    #Create Country per clade counts interactive plot
+    output$country_count <- renderPlotly({
+      req(input$gisaid)
+      req(input$status)
+      #Create empty dataframe to fill it in with country counts
+      country_count <- data.frame()
+      #Iterate over countries and count Clade frequency for each country
+      for (country in as.vector(levels(values$test_data$Country))) {
+        tmp <- values$test_data %>%
+          select(Country, Clade) %>%
+          filter(Country == country) %>%
+          count()
+        
+        country_count <- rbind(country_count, tmp)
+      }
+      
+      #Plot the dataframe into variable
+      plot_1 <- country_count %>%
+        ggplot(aes(x=Country, y=freq,  color=Clade, group=Clade)) +
+        geom_point(alpha=0.7) +
+        theme(axis.text.x = element_text(face = "bold", color = "#993333", 
+                                         angle = 45,  hjust = 1)) +
+        xlab("") + 
+        ylab("Patient count")
+      #Plot interactive plot
+      ggplotly(plot_1)
+      
+    })
     
+    #Create country odds ratio interactive plot
+    output$country_odds <- renderPlotly({
+      req(input$gisaid)
+      req(input$status)
+      #Country odds ratio calculation
+      #Construct the overal dataframe for High/Low risks calculations
+      status_freq <- values$test_data %>%
+        select(Patient.status) %>%
+        count() %>%
+        pivot_wider(names_from = Patient.status, values_from=freq)
+      #tmp dataframe to store clade count information (general)
+      clade_freq_tmp <- values$test_data %>%
+        select(Clade) %>%
+        count()
+      #Get the median value for patient count in single clade
+      clade_freq_median <- median(clade_freq_tmp$freq)
+      #Get the ratio of high/low categories. Use this ratio and median value for the clade to calculate reference clade
+      status_freq <-  status_freq %>% 
+        mutate(ratio=`High risk`/`Low risk`, part=1/(length(levels(as.factor(values$test_data$Clade)))+1)) %>%
+        transmute(`High risk`=(clade_freq_median/(ratio+1)) * ratio, `Low risk`=median(clade_freq_tmp$freq)-`High risk`)
+      #add clade name to the reference dummy clade
+      status_freq$Clade <- "A_ref"
+      #Calculate clade frequencies
+      clade_freq <- values$test_data %>%
+        select(Clade, Patient.status) %>%
+        count() %>%
+        pivot_wider(names_from = Patient.status, values_from=freq)
+      #Join reference clade with the clade information
+      whole_freq <- rbind(status_freq, clade_freq)
+      #Store clade names to the value
+      clade_names <- as.vector(whole_freq$Clade)
+      #Select only risj categories for oddsratio calculations
+      whole_freq <- whole_freq %>%
+        select(`High risk`, `Low risk`)
+      #oddsratio calculations
+      whole_seq_odds <- suppressWarnings(oddsratio(as.matrix(whole_freq)))
+      #Construct the new dataframe from Clade names and oddsratio calculation (columnbind the measure and p_values)
+      country_odds <- cbind(Clade=clade_names,as.data.frame(whole_seq_odds$measure), as.data.frame(whole_seq_odds$p.value))
+      country_odds$Clade <- as.factor(country_odds$Clade)
+      #Plot the data into variable
+      country_odds_plot <- country_odds %>%
+        ggplot(aes(x=Clade, y=estimate, lower=lower, upper=upper, chi=chi.square, fisher=fisher.exact, mid=midp.exact)) + 
+        geom_point(size = 3, alpha=.7, color="violet") +
+        ggtitle("Odds ration of being at high risk given the Clade") +
+        ylab("Odds ratio") +
+        xlab("Clade") +
+        geom_errorbar(aes(ymin=lower, ymax = upper))
+      #Plot the interactive plot
+      ggplotly(country_odds_plot)
+      
+    })
     
+
 }  
 
 # Run the application 
