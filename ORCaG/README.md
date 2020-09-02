@@ -61,7 +61,8 @@ Then the usage of the GUI is pretty the same. Inputs should be:
 <div align='center'>
   <img src='https://github.com/pavlohrab/GISAID_phylo/blob/master/ORCaG/Images/inputs.png'>
 </div>
-1.GISAID dataset is a must. We assume you are downloading 14-column dataset with `\t` as separator (tsv file). Names of the columns doesn't matter, but we are using the first one as Virus.name, second - as Accession.ID, and so on. The example is below:
+
+1. GISAID dataset is a must. We assume you are downloading 14-column dataset with `\t` as separator (tsv file). Names of the columns doesn't matter, but we are using the first one as Virus.name, second - as Accession.ID, and so on. The example is below:
 <br>
 
 >"Virus.name, Accession.ID, Collection.date, Location, Host, Additional.location.information,Gender, Patient.age, Patient.status,Passage, Specimen, Additional.host.information, Lineage, Clade"
@@ -74,8 +75,9 @@ When files are uploaded you can do plenty of things:
 <div align='center'>
   <img src='https://github.com/pavlohrab/GISAID_phylo/blob/master/ORCaG/Images/controls.png'>
 </div>
+
 1. Change Hospitalized patient status (High risk/Low risk/Default(as uploded)/Remove from dataset) (select Menu) <br>
-2. Use or not to use Alive/Live/Symptomatic categories of GISAID dataset (check box) <br>
+2. Select how to treat Alive/Live/Symptomatic categories of GISAID dataset (Default (as uploaded), Include as Low risk, Delete from the dataset) <br>
 3. Download the currently used dataset (Button) <br>
 4. Generate iTOL annotation files and download them (two distinct buttons) <br>
 5. Select which category to use for node colouring in iTOL annotation (select menu) <br>
@@ -113,15 +115,23 @@ The app is generating several output plots:
 <div align='center'>
   <img src='https://github.com/pavlohrab/GISAID_phylo/blob/master/ORCaG/Images/barplots.png'>
 </div>
-6. Age over categories distribution barplot. On the right computed statistics for those categories
+6. Patient count data for each clade in every single country
+<div align='center'>
+  <img src='https://github.com/pavlohrab/GISAID_phylo/blob/master/ORCaG/Images/country.png'>
+</div>
+7. OR calculations for every clade with given High/Low risk ratio. Reference clade is computed as base High/Low risk rate with the median value of the clades' cases.
+<div align='center'>
+  <img src='https://github.com/pavlohrab/GISAID_phylo/blob/master/ORCaG/Images/country_OR.png'>
+</div>
+8. Age over categories distribution barplot. On the right computed statistics for those categories
 <div align='center'>
   <img src='https://github.com/pavlohrab/GISAID_phylo/blob/master/ORCaG/Images/age_box.png'>
 </div>
-7. Distribution of age over Clades (with p_value computation among them) and Distribution of age over Clades with patient.status categories division. The significance is calculated between means in each clade for two categories
+9. Distribution of age over Clades (with p_value computation among them) and Distribution of age over Clades with patient.status categories division. The significance is calculated between means in each clade for two categories
 <div align='center'>
   <img src='https://github.com/pavlohrab/GISAID_phylo/blob/master/ORCaG/Images/clade_box.png'>
 </div>
-8. Phylocanvas interactive tree. 
+10. Phylocanvas interactive tree. 
 <div align='center'>
   <img src='https://github.com/pavlohrab/GISAID_phylo/blob/master/ORCaG/Images/phylocanvas.png'>
 </div>
